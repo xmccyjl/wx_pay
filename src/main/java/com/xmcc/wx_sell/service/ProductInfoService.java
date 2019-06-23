@@ -1,6 +1,7 @@
 package com.xmcc.wx_sell.service;
 
 import com.xmcc.wx_sell.common.ResultResponse;
+import com.xmcc.wx_sell.entity.ProductInfo;
 
 /**
  * @author khaleesi
@@ -8,5 +9,7 @@ import com.xmcc.wx_sell.common.ResultResponse;
  */
 public interface ProductInfoService {
     ResultResponse queryList();
+    ResultResponse<ProductInfo> queryById(String productId);
+    void updateProduct(ProductInfo productInfo);
 
 }

@@ -11,9 +11,6 @@ import java.util.List;
  * @author khaleesi
  * @create 2019-06-23 21:02
  *
- *
- * 85858585855
- * 112121
  */
 public class BatchDaoImp<T> implements BatchDao<T> {
 

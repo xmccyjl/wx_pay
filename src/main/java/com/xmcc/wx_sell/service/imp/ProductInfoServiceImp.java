@@ -1,5 +1,6 @@
 package com.xmcc.wx_sell.service.imp;
 
+import com.xmcc.wx_sell.common.ProductEnums;
 import com.xmcc.wx_sell.common.ResultEnums;
 import com.xmcc.wx_sell.common.ResultResponse;
 import com.xmcc.wx_sell.dto.ProductCategoryDto;
@@ -9,11 +10,13 @@ import com.xmcc.wx_sell.entity.ProductInfo;
 import com.xmcc.wx_sell.repository.ProductCategoryRepository;
 import com.xmcc.wx_sell.repository.ProductInfoRepository;
 import com.xmcc.wx_sell.service.ProductInfoService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -57,5 +60,26 @@ public class ProductInfoServiceImp implements ProductInfoService {
 
 
         return ResultResponse.success(productCategoryDtos);
+    }
+
+    @Override
+    public ResultResponse<ProductInfo> queryById(String productId) {
+        if(StringUtils.isBlank(productId)){
+            return ResultResponse.fail(ResultEnums.PARAM_ERROR.getMsg());
+        }
+        Optional<ProductInfo> byId = productInfoRepository.findById(productId);
+        if(!byId.isPresent()){
+            return ResultResponse.fail(ResultEnums.NOT_EXITS.getMsg());
+        }
+        ProductInfo productInfo = byId.get();
+        if(productInfo.getProductStatus()==ResultEnums.PRODUCT_DOWN.getCode()){
+             return ResultResponse.fail(ResultEnums.PRODUCT_DOWN.getMsg());
+        }
+        return ResultResponse.success(productInfo);
+    }
+
+    @Override
+    public void updateProduct(ProductInfo productInfo) {
+        ProductInfo save = productInfoRepository.save(productInfo);
     }
 }
